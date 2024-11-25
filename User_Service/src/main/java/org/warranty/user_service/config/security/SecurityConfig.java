@@ -56,7 +56,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests( requests -> requests.requestMatchers("/api/user/login")
                 .permitAll()
                         .requestMatchers("/api/user/add").hasRole("ADMIN")
-                        .requestMatchers("/api/user/all-users").hasRole("AUDIT")
+                        .requestMatchers("/api/user/all-users").hasAnyRole("AUDIT","ADMIN")
                 .anyRequest()
                 .authenticated())
 
