@@ -1,5 +1,6 @@
 package org.warranty.user_service.controller;
 
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,15 +67,17 @@ public class AccountController {
     @PostMapping("/validate")
     public ResponseEntity<Boolean> validateToken(@RequestHeader("Authorization") String token){
         logger.info("coming from warranty service and the token is {} ", token);
-        try{
-        //    String jwt = token.substring(7);
-            logger.info("AccountController -- before calling validateTokens ");
-            jwtUtils.validateTokens(token);
-            logger.info("AccountController -- after calling validateTokens ");
 
+            String jwt = token.substring(7);
+            logger.info("AccountController -- before calling validateTokens ");
+//            boolean isValid = jwtUtils.validateTokens(jwt);
+        try {
+            Claims claimedToken = jwtUtils.extractAllClaimsPublicAvailable(jwt);
             return ResponseEntity.ok(true);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+        }catch(Exception e) {
+           logger.error("Exception occurred while calling validateTokens {}", e.getMessage());
+           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false)    ;
+
         }
     }
 }
