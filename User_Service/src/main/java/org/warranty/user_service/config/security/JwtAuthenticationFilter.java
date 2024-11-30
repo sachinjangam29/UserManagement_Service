@@ -42,10 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
-        jwt = authHeader.substring(7);
-
-
+        jwt = authHeader.substring(7).trim();
         if (jwtUtils.validateTokens(jwt)) {
             userId = jwtUtils.extractUserId(jwt);
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId);
@@ -53,7 +50,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
-
         filterChain.doFilter(request, response);
     }
 }

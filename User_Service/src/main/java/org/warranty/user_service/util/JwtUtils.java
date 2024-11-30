@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 public class JwtUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(Jwt.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private static final String SECRET_KEY = "Secret12312312421421423dvdfgsrtghsrthtrhsrthrthsrthrthtrghvrthrthsrthstrhsrt";
     private static final int TOKEN_VALIDITY = 1000 * 60 * 60 * 10;
 
@@ -51,12 +51,16 @@ public class JwtUtils {
 
     public boolean validateTokens(String token){
         try{
+            logger.info("JwtUtil----before validating token-{}",token);
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parse(token);
+            logger.info("JwtUtil----after validating token ");
             return true;
         }catch (Exception e){
-            logger.error("Exception occurred while validating the token in Validate Token "+e.getMessage());
+            logger.error("Exception occurred while validating the token in Validate Token {}", e.getMessage());
+            logger.error("Invalid token: {}", token);
+            return false;
         }
-        return false;
+     //   return false;
     }
 
 
